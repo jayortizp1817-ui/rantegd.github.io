@@ -12,36 +12,22 @@
             padding: 0 20px;
             background: white;
             color: black;
+            position: relative;
+            padding-top: 60px;
         }
 
-        /* Top left image container */
-        .top-left {
+        /* Top right text */
+        .top-right {
             position: absolute;
             top: 20px;
-            left: 20px;
-        }
-
-        /* Adjust body to account for absolute positioned image */
-        body {
-            position: relative;
-            padding-top: 100px;
-        }
-
-        .profile-image {
-            text-align: center;
-        }
-
-        .profile-image img {
-            max-width: 150px;
-            border: 1px solid #ccc;
+            right: 20px;
+            font-size: 14px;
+            font-style: italic;
+            color: #555;
+            background: #f5f5f5;
+            padding: 8px 12px;
             border-radius: 5px;
-        }
-
-        .image-caption {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-            text-align: center;
+            border: 1px solid #ddd;
         }
 
         table {
@@ -83,12 +69,9 @@
 </head>
 <body>
 
-<!-- Top left image area - REPLACE 'your-image.jpg' with your actual image file name -->
-<div class="top-left">
-    <div class="profile-image">
-        <img src="image.png" alt="Discord Profile" onerror="this.style.display='none'">
-        <div class="image-caption">This is my Discord profile</div>
-    </div>
+<!-- Top right text -->
+<div class="top-right">
+    This is my Discord profile
 </div>
 
 <p><strong>Welcome to my site!!</strong></p>
@@ -114,7 +97,7 @@
 
 <p><em>There are no contact pages.</em></p>
 
-<table>
+<table border="1" style="width: 100%;">
   <tbody>
     <tr>
       <td>Conlangs</th>
