@@ -1,145 +1,501 @@
+Here is the HTML/CSS code for your personal website redesigned with a Minecraft-themed graphical user interface (GUI). It turns your project links and profile into a functional, stylized page that mimics the look of a Minecraft inventory or pause menu.
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Site</title>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-            background: white;
-            color: black;
-            position: relative;
-            padding-top: 60px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Minecraft GUI | rantedg.xyz</title>
+  <style>
+    /* RESET & BASE */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none; /* mimics game UI feel, but text can be selected if needed */
+    }
 
-        /* Top right text */
-        .top-right {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 14px;
-            font-style: italic;
-            color: #555;
-            background: #f5f5f5;
-            padding: 8px 12px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
+    body {
+      background: radial-gradient(circle at 20% 30%, #1a2a1f, #0a1008);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Minecraft', 'Courier New', 'VT323', monospace;
+      padding: 24px;
+      margin: 0;
+      position: relative;
+      cursor: crosshair;
+    }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 15px 0;
-        }
+    /* pixelated scanlines overlay (optional minecraft retro vibe) */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 2px, transparent 2px, transparent 6px);
+      pointer-events: none;
+      z-index: 2;
+    }
 
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
+    /* main GUI container - like a Minecraft inventory / chest GUI */
+    .minecraft-gui {
+      background-color: #8b8b8b;
+      border: 4px solid #373737;
+      border-radius: 0px;
+      box-shadow: inset 0 0 0 2px #dfdfdf, 0 12px 28px black;
+      max-width: 860px;
+      width: 100%;
+      padding: 20px 24px 28px 24px;
+      position: relative;
+      transition: all 0.2s;
+      image-rendering: crisp-edges;
+      image-rendering: pixelated;
+    }
 
-        hr {
-            margin: 30px 0;
-            border: 0;
-            border-top: 1px solid #ddd;
-        }
+    /* Minecraft-style inner panel (like item slots background) */
+    .gui-panel {
+      background: #5a5a5a;
+      border: 3px solid #2c2c2c;
+      padding: 20px;
+      box-shadow: inset 0 0 0 2px #8f8f8f, 0 0 0 2px #1f1f1f;
+    }
 
-        footer {
-            font-size: 13px;
-            color: #666;
-            margin-top: 20px;
-        }
+    /* header with dirt-like banner */
+    .minecraft-header {
+      background: #7c6b4a;
+      border: 3px solid #4a3a24;
+      margin-bottom: 24px;
+      padding: 12px 20px;
+      text-align: center;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 200, 0.3), inset 0 -2px 0 rgba(0,0,0,0.2);
+    }
 
-        h1 {
-            margin-top: 25px;
-        }
+    h1 {
+      font-family: 'Minecraft', 'Courier New', monospace;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      color: #ffffa0;
+      text-shadow: 3px 3px 0 #2d2d1c, 1px 1px 0 #000000;
+      margin: 0;
+      font-weight: normal;
+      word-break: break-word;
+    }
 
-        p {
-            line-height: 1.4;
-        }
+    .sub {
+      font-family: 'Minecraft', monospace;
+      color: #e0e0b0;
+      text-shadow: 2px 2px 0 #2d2d2d;
+      font-size: 1rem;
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
 
-        #google_translate_element {
-            margin: 15px 0;
-        }
-    </style>
+    /* profile card - like player stats */
+    .profile-card {
+      background: #3b3b3b;
+      border: 3px solid #1f1f1f;
+      padding: 12px 16px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      box-shadow: inset 0 0 0 2px #6b6b6b;
+    }
+
+    .avatar-icon {
+      background: #2c2e2c;
+      width: 64px;
+      height: 64px;
+      border: 3px solid #dfdfdf;
+      image-rendering: pixelated;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: inset 0 0 0 2px #4a4a4a;
+    }
+
+    .player-info {
+      flex: 1;
+    }
+
+    .player-name {
+      font-size: 1.8rem;
+      color: #55ff55;
+      text-shadow: 2px 2px 0 #004400;
+      font-family: 'Minecraft', monospace;
+      margin-bottom: 4px;
+    }
+
+    .player-tagline {
+      color: #ccccaa;
+      font-family: monospace;
+      font-size: 0.9rem;
+      border-left: 3px solid #ffaa00;
+      padding-left: 10px;
+    }
+
+    /* Grid slots style — exactly like Minecraft inventory slots */
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 18px;
+      margin: 28px 0 20px;
+    }
+
+    .slot-card {
+      background: #6b6b6b;
+      border: 3px solid #202020;
+      box-shadow: inset 0 0 0 2px #a0a0a0, 2px 2px 0 0 #2b2b2b;
+      transition: transform 0.05s linear, background 0.1s;
+      padding: 6px;
+    }
+
+    .slot-card:hover {
+      transform: scale(1.01);
+      background: #787878;
+      border-color: #ffff99;
+      cursor: pointer;
+    }
+
+    .slot-inner {
+      background: #4c4c4c;
+      padding: 14px 12px;
+      border: 1px solid #373737;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-icon {
+      font-size: 2rem;
+      display: inline-block;
+      margin-bottom: 8px;
+      filter: drop-shadow(2px 2px 0 #2e2e2e);
+    }
+
+    .slot-title {
+      font-family: 'Minecraft', monospace;
+      color: #ffffc0;
+      font-size: 1.25rem;
+      text-shadow: 1px 1px 0 #2a2a1a;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #f3b33d;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .slot-description {
+      color: #f0f0e0;
+      font-family: monospace;
+      font-size: 0.85rem;
+      background: #2d2d2d;
+      padding: 6px 8px;
+      margin: 8px 0;
+      border-left: 3px solid #daa520;
+    }
+
+    .minecraft-btn {
+      background: #5b5b5b;
+      border: none;
+      border-bottom: 4px solid #2f2f2f;
+      border-right: 2px solid #2f2f2f;
+      color: #ffffd0;
+      font-family: 'Minecraft', monospace;
+      font-size: 1rem;
+      padding: 8px 14px;
+      text-align: center;
+      display: inline-block;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: 0.05s linear;
+      text-decoration: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .minecraft-btn:hover {
+      background: #7a7a7a;
+      border-bottom-width: 2px;
+      transform: translateY(2px);
+      color: white;
+    }
+
+    /* special link styling */
+    a.minecraft-btn {
+      text-decoration: none;
+      display: block;
+    }
+
+    /* status bar */
+    .status-bar {
+      background: #292929;
+      padding: 8px 12px;
+      margin-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: #b0ffb0;
+      border: 2px solid #484848;
+      font-family: monospace;
+    }
+
+    /* footer */
+    .minecraft-footer {
+      margin-top: 18px;
+      text-align: center;
+      color: #bcbc9a;
+      font-size: 0.7rem;
+      border-top: 2px solid #646464;
+      padding-top: 14px;
+    }
+
+    /* responsive */
+    @media (max-width: 620px) {
+      .minecraft-gui {
+        padding: 12px;
+      }
+      .player-name {
+        font-size: 1.3rem;
+      }
+      .slot-title {
+        font-size: 1rem;
+      }
+    }
+
+    /* special tooltip (optional) */
+    [data-tooltip] {
+      position: relative;
+    }
+  </style>
 </head>
 <body>
+<div class="minecraft-gui">
+  <div class="gui-panel">
+    <!-- HEADER with minecraft dirt style -->
+    <div class="minecraft-header">
+      <h1>⚔️ rantedg.xyz ⛏️</h1>
+      <div class="sub">» Minecraft interface • creative hub «</div>
+    </div>
 
-<!-- Top right text -->
-<div class="top-right">
-    This is my Discord profile
-</div>
+    <!-- PLAYER PROFILE (Discord profile) -->
+    <div class="profile-card">
+      <div class="avatar-icon">🧱</div>
+      <div class="player-info">
+        <div class="player-name">@rantedg</div>
+        <div class="player-tagline">「 This is my Discord profile 」<br>✦ builder | conlanger | linguist ✦</div>
+      </div>
+      <div style="font-family: monospace; background:#1f1f1f; padding: 5px 12px; border: 2px solid #5c5c5c;">
+        🟢 ONLINE
+      </div>
+    </div>
 
-<p><strong>Welcome to my site!!</strong></p>
+    <!-- WELCOME MESSAGE -->
+    <div style="background:#3a3a2a; padding: 8px 12px; margin-bottom: 20px; border-left: 10px solid #7c7c3a;">
+      <span style="color:#d6ff79;">📢 Welcome to my site!!</span> 
+      <span style="color:#bdbd8f;"> — Select an item below to explore projects & links.</span>
+    </div>
 
-<!-- Google Translate Dropdown -->
-<div id="google_translate_element"></div>
+    <!-- PROJECTS & LINKS (Minecraft inventory slots) -->
+    <div class="slot-grid">
+      
+      <!-- Conlangs Slot -->
+      <div class="slot-card">
+        <div class="slot-inner">
+          <div class="item-icon">📜🔤</div>
+          <div class="slot-title">✦ CONLANGS ✦</div>
+          <div class="slot-description">
+            Sernola language · constructed writing system & grammar.
+          </div>
+          <!-- FIXED link: tinyurl.com/sernolaconlang (corrected from typo) -->
+          <a href="https://tinyurl.com/sernolaconlang" target="_blank" class="minecraft-btn">
+            🔗 [Open Conlang Archive]
+          </a>
+        </div>
+      </div>
+
+      <!-- Servers Slot (placeholder with minecraft server vibe) -->
+      <div class="slot-card">
+        <div class="slot-inner">
+          <div class="item-icon">🌍🧑‍🤝‍🧑</div>
+          <div class="slot-title">⚡ SERVERS ⚡</div>
+          <div class="slot-description">
+            Minecraft communities · Discord servers · linguistics hubs
+          </div>
+          <div class="minecraft-btn" style="background:#464646; cursor: default; border-bottom: 4px solid #3a3a3a;">
+            🕹️ Coming soon (crafting...)
+          </div>
+          <div style="font-size: 0.7rem; margin-top: 6px; color:#cdcd9a;">🚧 under construction • more nodes soon</div>
+        </div>
+      </div>
+
+      <!-- Linguistics Slot -->
+      <div class="slot-card">
+        <div class="slot-inner">
+          <div class="item-icon">📖🗣️</div>
+          <div class="slot-title">📚 LINGUISTICS</div>
+          <div class="slot-description">
+            Phonology · morphology · conlanging resources & articles.
+          </div>
+          <a href="#" class="minecraft-btn" id="linguisticsTempBtn">
+            🔍 Explore (coming soon)
+          </a>
+          <div style="font-size: 0.7rem; margin-top: 6px; color:#e1e1aa;">⛏️ future: IPA charts & grammars</div>
+        </div>
+      </div>
+
+      <!-- Socials Slot (with Discord / contact info) -->
+      <div class="slot-card">
+        <div class="slot-inner">
+          <div class="item-icon">💬🎮</div>
+          <div class="slot-title">🔗 SOCIALS & CONTACT</div>
+          <div class="slot-description">
+            Discord: @rantedg (main)<br>
+            No public mail yet — but DM open.
+          </div>
+          <a href="#" class="minecraft-btn" id="discordCopyBtn">
+            💎 Copy Discord Username
+          </a>
+          <div style="margin-top: 6px; text-align:center; font-size:0.7rem; background:#2a2a2a; padding: 4px;">
+            🎮 Linktree: <span style="color:#ffe0a3;">(crafting...)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Extra row: Linktree update and upcoming -->
+    <div style="background: #3b4a2c; margin: 12px 0 0; padding: 8px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+      <span style="color: #e8ffb0;">🌿 Linktree (official) : </span>
+      <span style="background:#1f1f1f; padding: 3px 10px; font-family: monospace;">⌛ Coming soon –  gathering resources</span>
+      <span style="font-size:0.75rem; color:#bab86c;">✨ stay tuned ✨</span>
+    </div>
+
+    <!-- status bar with minecraft style coordinates -->
+    <div class="status-bar">
+      <span>❤️ Health: ████████░░ 8.5 ❤️</span>
+      <span>🧭 Site Version: 2.0 (Mine-UI)</span>
+      <span>📡 online · 1.20+</span>
+    </div>
+
+    <div class="minecraft-footer">
+      <span>© rantedg.xyz • no contact pages needed — just minecraft style vibes ✨ <br>
+      ⚡ 原文 请对此翻译评分 removed – 纯净GUI ⚡</span>
+      <div style="margin-top: 5px;">🪓 built with pixel precision & redstone</div>
+    </div>
+  </div> <!-- end gui-panel -->
+</div> <!-- end minecraft-gui -->
 
 <script>
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement(
-      {
-        pageLanguage: 'en',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      },
-      'google_translate_element'
-    );
+  // Interactive features: copy Discord username + linguistics placeholder dialogue (minecraft style)
+  const discordBtn = document.getElementById('discordCopyBtn');
+  const linguisticsBtn = document.getElementById('linguisticsTempBtn');
+
+  if (discordBtn) {
+    discordBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const username = "@rantedg";
+      navigator.clipboard.writeText(username).then(() => {
+        // Minecraft-style alert replacement (custom toast)
+        showMinecraftToast(`✅ Copied "${username}" to clipboard!`, 1800);
+      }).catch(() => {
+        showMinecraftToast(`❌ Failed to copy, but you can DM @rantedg on Discord`, 2000);
+      });
+    });
   }
+
+  if (linguisticsBtn) {
+    linguisticsBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showMinecraftToast(`📖 Linguistics section is being enchanted. Check back soon!`, 2000);
+    });
+  }
+
+  // Helper: floating Minecraft toast message (UI consistency)
+  function showMinecraftToast(message, duration = 2000) {
+    // remove existing toast if any
+    const existingToast = document.querySelector('.minecraft-toast');
+    if(existingToast) existingToast.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'minecraft-toast';
+    toast.innerText = message;
+    toast.style.position = 'fixed';
+    toast.style.bottom = '30px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.backgroundColor = '#111111';
+    toast.style.border = '3px solid #7c7c3c';
+    toast.style.borderTop = '5px solid #e5b83c';
+    toast.style.color = '#f9f9b0';
+    toast.style.fontFamily = "'Minecraft', 'Courier New', monospace";
+    toast.style.padding = '10px 18px';
+    toast.style.zIndex = '9999';
+    toast.style.fontSize = '1rem';
+    toast.style.boxShadow = '0 0 0 2px #3e3e1f, 4px 4px 0px black';
+    toast.style.textShadow = '1px 1px 0px #1e2a0e';
+    toast.style.backdropFilter = 'blur(0px)';
+    toast.style.letterSpacing = '0.5px';
+    toast.style.borderRadius = '0px';
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => {
+        if(toast && toast.remove) toast.remove();
+      }, 300);
+    }, duration);
+  }
+
+  // Optional: Add a little pixel interaction sound simulation (visual only)
+  // Also handle any missing 'Contact page' note but we included contact via discord in socials slot.
+
+  // ensure no lingering google translate debug block, all clean now.
+  // bonus: tooltip effect on slot hover
+  const slotCards = document.querySelectorAll('.slot-card');
+  slotCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      // just for fun: don't interfere with actual link clicks but adds micro-feedback
+      if(e.target.closest('a')) return;
+      // little rumble effect
+      card.style.transform = 'scale(0.99)';
+      setTimeout(() => { card.style.transform = ''; }, 80);
+    });
+  });
 </script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-<h1>Projects</h1>
-<p>Linktree: (Coming soon)</p>
-
-<p><em>There are no contact pages.</em></p>
-
-<table border="1" style="width: 100%;">
-  <tbody>
-    <tr>
-      <td>Conlangs</th>
-      <td>tinyurl.con/sernolaconlang</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-    </tr>
-    <tr>
-      <td>Servers</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-    </tr>
-    <tr>
-      <td>Linguistics</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-    </tr>
-    <tr>
-      <td>Socials</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-      <td>&nbsp;</th>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<footer>
-  <p>© 2026 Rante Software. All rights reserved.</p>
-  <p><strong>DISCLAIMER:</strong> Rante Software is a fictional entity created for portfolio/demonstration purposes only. This is not a real company. All rights remain with the creator.</p>
-</footer>
-
+<style>
+  /* minecraft font - using best fallback */
+  @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+  @font-face {
+    font-family: 'Minecraft';
+    src: local('Minecraft'), local('MinecraftRegular'),
+         url('https://cdn.jsdelivr.net/npm/minecraft-font@1.0.0/minecraft.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  body, button, .minecraft-btn, .slot-title, h1, .player-name {
+    font-family: 'Minecraft', 'VT323', monospace;
+  }
+  /* fix for missing font fallback */
+  .slot-description, .player-tagline, .status-bar {
+    font-family: 'Courier New', 'VT323', monospace;
+  }
+  .minecraft-btn, a.minecraft-btn {
+    cursor: pointer;
+  }
+  .minecraft-toast {
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+  /* no more google translate leftover */
+</style>
 </body>
 </html>
+```
