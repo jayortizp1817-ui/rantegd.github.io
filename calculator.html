@@ -1,230 +1,376 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Four Function Calculator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #1e1e1e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
+}
+
+.calculator {
+    width: 340px;
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.4);
+}
+
+h2 {
+    text-align: center;
+    margin-top: 0;
+}
+
+#display {
+    width: 100%;
+    box-sizing: border-box;
+    height: 70px;
+    border: none;
+    border-radius: 10px;
+    font-size: 32px;
+    text-align: right;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: #f5f5f5;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 8px;
+}
+
+button {
+    height: 60px;
+    border: none;
+    border-radius: 10px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+button:hover {
+    transform: scale(1.03);
+}
+
+.operator {
+    background: #ff9500;
+    color: white;
+}
+
+.utility {
+    background: #666;
+    color: white;
+}
+
+.number {
+    background: #444;
+    color: white;
+}
+
+.equals {
+    background: #28a745;
+    color: white;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #bbb;
+}
+</style>
 </head>
+
 <body>
 
-<p><strong>Calculator Online, 4 functions</strong><br>
-No ads, no distractions, for everyone! Free!<br>
-Made on&nbsp;1:27:31 PM&nbsp;06/01/2026</p>
-<hr>
+<div class="calculator">
 
-<!-- simple four function calculator - no css, no extra fluff -->
-<div>
-    <!-- display -->
-    <input type="text" id="display" readonly style="font-size:24px;width:250px;text-align:right;padding:8px;margin-bottom:8px;background:#f5f5f5;border:1px solid #aaa;" value="0">
-    <br>
+<h2>Calculator</h2>
 
-    <!-- buttons -->
-    <button id="btn7">7</button>
-    <button id="btn8">8</button>
-    <button id="btn9">9</button>
-    <button id="btnDivide">/</button><br>
+<input
+    id="display"
+    type="text"
+    readonly
+    value="0"
+    aria-label="Calculator Display"
+>
 
-    <button id="btn4">4</button>
-    <button id="btn5">5</button>
-    <button id="btn6">6</button>
-    <button id="btnMultiply">*</button><br>
+<div class="buttons">
 
-    <button id="btn1">1</button>
-    <button id="btn2">2</button>
-    <button id="btn3">3</button>
-    <button id="btnSubtract">-</button><br>
+<button class="utility" onclick="append('(')">(</button>
+<button class="utility" onclick="append(')')">)</button>
+<button class="utility" onclick="backspace()">⌫</button>
+<button class="utility" onclick="clearAll()">C</button>
 
-    <button id="btn0">0</button>
-    <button id="btnDecimal">.</button>
-    <button id="btnClear">C</button>
-    <button id="btnAdd">+</button><br>
+<button class="number" onclick="append('7')">7</button>
+<button class="number" onclick="append('8')">8</button>
+<button class="number" onclick="append('9')">9</button>
+<button class="operator" onclick="append('/')">÷</button>
 
-    <button id="btnEquals" style="width:180px;">=</button>
-    <button id="btnBackspace">⌫</button>
+<button class="number" onclick="append('4')">4</button>
+<button class="number" onclick="append('5')">5</button>
+<button class="number" onclick="append('6')">6</button>
+<button class="operator" onclick="append('*')">×</button>
+
+<button class="number" onclick="append('1')">1</button>
+<button class="number" onclick="append('2')">2</button>
+<button class="number" onclick="append('3')">3</button>
+<button class="operator" onclick="append('-')">−</button>
+
+<button class="number" onclick="append('0')">0</button>
+<button class="number" onclick="append('.')">.</button>
+<button class="equals" onclick="calculate()">=</button>
+<button class="operator" onclick="append('+')">+</button>
+
 </div>
 
-<hr>
-<small>Free • No ads • No distractions</small>
+<div class="footer">
+Free • No Ads • No Distractions
+</div>
+
+</div>
 
 <script>
-    // four function calculator - simple and clean
-    let current = "0";
-    let previous = null;
-    let operator = null;
-    let waitingForOperand = false;
 
-    const display = document.getElementById("display");
+let expression = "";
 
-    function updateDisplay() {
-        display.value = current;
+const display =
+    document.getElementById("display");
+
+function updateDisplay() {
+    display.value =
+        expression || "0";
+}
+
+function append(value) {
+
+    if (expression === "Error") {
+        expression = "";
     }
 
-    function inputDigit(digit) {
-        if (waitingForOperand) {
-            current = digit;
-            waitingForOperand = false;
+    expression += value;
+    updateDisplay();
+}
+
+function clearAll() {
+    expression = "";
+    updateDisplay();
+}
+
+function backspace() {
+
+    if (expression === "Error") {
+        expression = "";
+    } else {
+        expression =
+            expression.slice(0, -1);
+    }
+
+    updateDisplay();
+}
+
+function precedence(op) {
+
+    if (
+        op === "+" ||
+        op === "-"
+    ) return 1;
+
+    if (
+        op === "*" ||
+        op === "/"
+    ) return 2;
+
+    return 0;
+}
+
+function tokenize(expr) {
+
+    return expr.match(
+        /\d+(\.\d+)?|[()+\-*/]/g
+    ) || [];
+}
+
+function toRPN(tokens) {
+
+    const output = [];
+    const operators = [];
+
+    for (const token of tokens) {
+
+        if (!isNaN(token)) {
+
+            output.push(token);
+
+        } else if (token === "(") {
+
+            operators.push(token);
+
+        } else if (token === ")") {
+
+            while (
+                operators.length &&
+                operators.at(-1) !== "("
+            ) {
+                output.push(
+                    operators.pop()
+                );
+            }
+
+            operators.pop();
+
         } else {
-            current = current === "0" ? digit : current + digit;
+
+            while (
+                operators.length &&
+                precedence(
+                    operators.at(-1)
+                ) >= precedence(token)
+            ) {
+                output.push(
+                    operators.pop()
+                );
+            }
+
+            operators.push(token);
         }
-        updateDisplay();
     }
 
-    function inputDecimal() {
-        if (waitingForOperand) {
-            current = "0.";
-            waitingForOperand = false;
-            updateDisplay();
-            return;
-        }
-        if (!current.includes(".")) {
-            current = current + ".";
-            updateDisplay();
-        }
+    while (operators.length) {
+        output.push(
+            operators.pop()
+        );
     }
 
-    function clearAll() {
-        current = "0";
-        previous = null;
-        operator = null;
-        waitingForOperand = false;
-        updateDisplay();
-    }
+    return output;
+}
 
-    function backspace() {
-        if (waitingForOperand) return;
-        if (current.length === 1 || (current.length === 2 && current.startsWith("-"))) {
-            current = "0";
-        } else {
-            current = current.slice(0, -1);
-            if (current === "" || current === "-") current = "0";
-        }
-        updateDisplay();
-    }
+function evaluateRPN(rpn) {
 
-    function performOperation() {
-        if (operator === null || previous === null || waitingForOperand) return;
-        let result;
-        const prev = parseFloat(previous);
-        const curr = parseFloat(current);
-        
-        if (isNaN(prev) || isNaN(curr)) {
-            clearAll();
-            return;
+    const stack = [];
+
+    for (const token of rpn) {
+
+        if (!isNaN(token)) {
+
+            stack.push(
+                Number(token)
+            );
+
+            continue;
         }
-        
-        switch (operator) {
+
+        const b = stack.pop();
+        const a = stack.pop();
+
+        switch (token) {
+
             case "+":
-                result = prev + curr;
+                stack.push(a + b);
                 break;
+
             case "-":
-                result = prev - curr;
+                stack.push(a - b);
                 break;
+
             case "*":
-                result = prev * curr;
+                stack.push(a * b);
                 break;
+
             case "/":
-                if (curr === 0) {
-                    current = "Error";
-                    previous = null;
-                    operator = null;
-                    waitingForOperand = true;
-                    updateDisplay();
-                    return;
+
+                if (b === 0) {
+                    throw Error();
                 }
-                result = prev / curr;
+
+                stack.push(a / b);
                 break;
-            default:
-                return;
         }
-        
-        // clean up floating point
-        current = parseFloat(result.toFixed(10)).toString();
-        if (current.includes(".") && current.endsWith(".0")) current = current.slice(0, -2);
-        previous = null;
-        operator = null;
-        waitingForOperand = true;
-        updateDisplay();
     }
 
-    function setOperator(op) {
-        if (current === "Error") {
-            clearAll();
-        }
-        
-        if (operator !== null && !waitingForOperand) {
-            performOperation();
-        }
-        
-        previous = current;
-        operator = op;
-        waitingForOperand = true;
+    return stack[0];
+}
+
+function calculate() {
+
+    try {
+
+        const tokens =
+            tokenize(expression);
+
+        const rpn =
+            toRPN(tokens);
+
+        const result =
+            evaluateRPN(rpn);
+
+        expression =
+            parseFloat(
+                result.toFixed(10)
+            ).toString();
+
+    }
+    catch {
+
+        expression = "Error";
     }
 
-    function computeEquals() {
-        if (current === "Error") {
-            clearAll();
-            return;
-        }
-        if (operator === null || waitingForOperand) return;
-        performOperation();
-    }
+    updateDisplay();
+}
 
-    // button bindings
-    document.getElementById("btn0").onclick = () => inputDigit("0");
-    document.getElementById("btn1").onclick = () => inputDigit("1");
-    document.getElementById("btn2").onclick = () => inputDigit("2");
-    document.getElementById("btn3").onclick = () => inputDigit("3");
-    document.getElementById("btn4").onclick = () => inputDigit("4");
-    document.getElementById("btn5").onclick = () => inputDigit("5");
-    document.getElementById("btn6").onclick = () => inputDigit("6");
-    document.getElementById("btn7").onclick = () => inputDigit("7");
-    document.getElementById("btn8").onclick = () => inputDigit("8");
-    document.getElementById("btn9").onclick = () => inputDigit("9");
-    document.getElementById("btnDecimal").onclick = () => inputDecimal();
-    document.getElementById("btnClear").onclick = () => clearAll();
-    document.getElementById("btnBackspace").onclick = () => backspace();
-    document.getElementById("btnAdd").onclick = () => setOperator("+");
-    document.getElementById("btnSubtract").onclick = () => setOperator("-");
-    document.getElementById("btnMultiply").onclick = () => setOperator("*");
-    document.getElementById("btnDivide").onclick = () => setOperator("/");
-    document.getElementById("btnEquals").onclick = () => computeEquals();
+window.addEventListener(
+    "keydown",
+    (e) => {
 
-    // keyboard support
-    window.addEventListener("keydown", (e) => {
         const key = e.key;
-        if (/^[0-9]$/.test(key)) {
+
+        if (
+            /^[0-9]$/.test(key)
+        ) {
+            append(key);
+        }
+
+        else if (
+            "+-*/().".includes(key)
+        ) {
+            append(key);
+        }
+
+        else if (
+            key === "Enter" ||
+            key === "="
+        ) {
             e.preventDefault();
-            inputDigit(key);
-        } else if (key === ".") {
-            e.preventDefault();
-            inputDecimal();
-        } else if (key === "+") {
-            e.preventDefault();
-            setOperator("+");
-        } else if (key === "-") {
-            e.preventDefault();
-            setOperator("-");
-        } else if (key === "*") {
-            e.preventDefault();
-            setOperator("*");
-        } else if (key === "/") {
-            e.preventDefault();
-            setOperator("/");
-        } else if (key === "Enter" || key === "=") {
-            e.preventDefault();
-            computeEquals();
-        } else if (key === "Escape") {
-            e.preventDefault();
-            clearAll();
-        } else if (key === "Backspace") {
-            e.preventDefault();
+            calculate();
+        }
+
+        else if (
+            key === "Backspace"
+        ) {
             backspace();
-        } else if (key === "Delete") {
-            e.preventDefault();
+        }
+
+        else if (
+            key === "Escape"
+        ) {
             clearAll();
         }
-    });
+    }
+);
+
 </script>
 
 </body>
 </html>
+```
