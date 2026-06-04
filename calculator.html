@@ -7,88 +7,41 @@
 <title>Calculator</title>
 
 <style>
+    ```css
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
-    background: #1e1e1e;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    color: white;
-}
-
-.calculator {
-    width: 340px;
-    background: #2a2a2a;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0,0,0,.4);
-}
-
-h2 {
-    text-align: center;
-    margin-top: 0;
+    max-width: 320px;
+    margin: 40px auto;
 }
 
 #display {
     width: 100%;
     box-sizing: border-box;
-    height: 70px;
-    border: none;
-    border-radius: 10px;
-    font-size: 32px;
+    font-size: 28px;
     text-align: right;
-    padding: 12px;
-    margin-bottom: 12px;
-    background: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
 .buttons {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 8px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
 }
 
 button {
-    height: 60px;
-    border: none;
-    border-radius: 10px;
-    font-size: 22px;
+    height: 50px;
+    font-size: 20px;
     cursor: pointer;
-    transition: 0.15s;
-}
-
-button:hover {
-    transform: scale(1.03);
-}
-
-.operator {
-    background: #ff9500;
-    color: white;
-}
-
-.utility {
-    background: #666;
-    color: white;
-}
-
-.number {
-    background: #444;
-    color: white;
-}
-
-.equals {
-    background: #28a745;
-    color: white;
 }
 
 .footer {
     text-align: center;
-    margin-top: 12px;
+    margin-top: 10px;
     font-size: 12px;
-    color: #bbb;
 }
+```
+
 </style>
 </head>
 
